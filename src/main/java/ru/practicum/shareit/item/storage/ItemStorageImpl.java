@@ -17,16 +17,15 @@ import java.util.stream.Collectors;
 @Slf4j
 @Component
 @Qualifier("InMemoryItemStorage")
-public class ItemStorageImpl implements ItemStorage{
-        private final HashMap<Integer, Item> itemHashMap = new HashMap<>();
-        private Integer id = 0;
+public class ItemStorageImpl implements ItemStorage {
+   private final HashMap<Integer, Item> itemHashMap = new HashMap<>();
+   private Integer id = 0;
 
-
-        @Override
-        public List<Item> getAll() {
-            log.info("Получен список всех предметов");
-            return new ArrayList<>(itemHashMap.values());
-        }
+   @Override
+   public List<Item> getAll() {
+        log.info("Получен список всех предметов");
+        return new ArrayList<>(itemHashMap.values());
+   }
 
         @Override
         public Item getById(int id) {
@@ -86,4 +85,4 @@ public class ItemStorageImpl implements ItemStorage{
             }
             return id;
         }
-    }
+}
