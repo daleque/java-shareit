@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Component
-@Qualifier("InMemoryItemStorage")
 public class ItemStorageImpl implements ItemStorage {
    private final HashMap<Integer, Item> itemHashMap = new HashMap<>();
    private Integer id = 0;
@@ -38,7 +37,7 @@ public class ItemStorageImpl implements ItemStorage {
             if (item.getName().isEmpty() || (item.getAvailable() == null) || item.getDescription() == null) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format("Плохая вещь"));
             } else {
-                item.setId(makeId());
+                item.setId(++id);
                 log.info("Предмет c id {} создан", id);
                 itemHashMap.put(item.getId(), item);
             }
@@ -73,16 +72,5 @@ public class ItemStorageImpl implements ItemStorage {
                     .filter(item -> item.getName().toLowerCase(Locale.ROOT).contains(text) ||
                             item.getDescription().toLowerCase(Locale.ROOT).contains(text))
                     .collect(Collectors.toList());
-        }
-
-        private Integer makeId() {
-            if (id == null) {
-                id = 1;
-            } else if (id < 0) {
-                throw new ValidationException("Некорректный id");
-            } else {
-                id++;
-            }
-            return id;
         }
 }
