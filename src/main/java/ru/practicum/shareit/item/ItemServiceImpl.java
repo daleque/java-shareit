@@ -21,18 +21,22 @@ public class ItemServiceImpl implements ItemService {
     public Collection<Item> getAll() {
         return itemStorage.getAll();
     }
+
     @Override
     public Item create(Item item) {
         return itemStorage.create(item);
     }
+
     @Override
     public Item getById(int id) {
         return itemStorage.getById(id);
     }
+
     @Override
     public void remove(int id) {
         itemStorage.remove(id);
     }
+
     @Override
     public Item update(int id, Item item) {
         Item updatedItem = itemStorage.getById(id);
@@ -50,10 +54,12 @@ public class ItemServiceImpl implements ItemService {
         itemStorage.update(id, updatedItem);
         return updatedItem;
     }
+
     @Override
     public void removeAll() {
         itemStorage.removeAll();
     }
+
     @Override
     public List<Item> searchByText(String text) {
         if (text != null && !text.isBlank())
