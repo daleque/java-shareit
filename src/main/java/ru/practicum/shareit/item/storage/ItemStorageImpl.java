@@ -2,7 +2,7 @@ package ru.practicum.shareit.item.storage;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.server.ResponseStatusException;
 import ru.practicum.shareit.item.model.Item;
 
@@ -13,7 +13,7 @@ import java.util.Locale;
 import java.util.stream.Collectors;
 
 @Slf4j
-@Component
+@Repository
 public class ItemStorageImpl implements ItemStorage {
    private final HashMap<Integer, Item> itemHashMap = new HashMap<>();
    private Integer id = 0;

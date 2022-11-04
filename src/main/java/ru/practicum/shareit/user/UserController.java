@@ -12,39 +12,39 @@ import java.util.stream.Collectors;
 @RequestMapping(path = "/users")
 public class UserController {
 
-    private UserServiceImpl userServiceImpl;
+    private UserService userService;
 
     public UserController(UserServiceImpl userServiceImpl) {
-        this.userServiceImpl = userServiceImpl;
+        this.userService = userServiceImpl;
     }
 
     @GetMapping
     public Collection<UserDto> getAll() {
-        return userServiceImpl.getAll().stream()
+        return userService.getAll().stream()
                 .map(UserMapper::toUserDto)
                 .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
     public UserDto getById(@PathVariable int id) {
-        return UserMapper.toUserDto(userServiceImpl.getById(id));
+        return UserMapper.toUserDto(userService.getById(id));
     }
 
     @PostMapping
     public UserDto create(@Valid @RequestBody UserDto userDto) {
         User user = UserMapper.toUser(userDto);
         return UserMapper.toUserDto(
-                userServiceImpl.create(user)
+                userService.create(user)
         );
     }
 
     @PatchMapping("/{id}")
     public UserDto update(@PathVariable int id, @RequestBody User user) {
-        return UserMapper.toUserDto(userServiceImpl.update(id, user));
+        return UserMapper.toUserDto(userService.update(id, user));
     }
 
     @DeleteMapping("/{id}")
     public void remove(@PathVariable int id) {
-        userServiceImpl.remove(id);
+        userService.remove(id);
     }
 }

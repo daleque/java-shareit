@@ -1,9 +1,8 @@
 package ru.practicum.shareit.user.storage;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.server.ResponseStatusException;
 import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.user.model.User;
@@ -13,8 +12,7 @@ import java.util.HashMap;
 import java.util.Optional;
 
 @Slf4j
-@Component
-@Qualifier("inMemoryUserStorage")
+@Repository
 public class UserStorageImpl implements UserStorage {
 
         private HashMap<Integer, User> userHashMap = new HashMap<>();

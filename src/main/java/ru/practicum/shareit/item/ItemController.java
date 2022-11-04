@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.user.UserServiceImpl;
+import ru.practicum.shareit.user.UserService;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,8 +16,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ItemController {
     public static final String USER_ID_HEADER = "X-Sharer-User-Id";
-    private final ItemServiceImpl itemServiceImpl;
-    private final UserServiceImpl userServiceImpl;
+    private final ItemService itemService;
+    private final UserService userService;
     private final ItemMapper itemMapper;
 
     @PostMapping
@@ -25,8 +25,8 @@ public class ItemController {
             @RequestHeader(USER_ID_HEADER) int userId,
             @RequestBody ItemDto itemDto
     ) {
-        Item item = itemMapper.toItem(itemDto, userServiceImpl.getById(userId));
-        Item itemSaved = itemServiceImpl.create(item);
+        Item item = itemMapper.toItem(itemDto, userService.getById(userId));
+        Item itemSaved = itemService.create(item);
         return itemMapper.toItemDto(itemSaved);
     }
 
@@ -36,30 +36,30 @@ public class ItemController {
             @PathVariable int itemId,
             @RequestBody ItemDto itemDto
     ) {
-        Item itemValid = itemServiceImpl.getById(itemId);
+        Item itemValid = itemService.getById(itemId);
         if (itemValid.getOwner().getId() != userId) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Вещь не пренадлежит владельцу");
         }
-        Item item = itemMapper.toItem(itemDto, userServiceImpl.getById(userId));
-        Item itemUpdated = itemServiceImpl.update(itemId, item);
+        Item item = itemMapper.toItem(itemDto, userService.getById(userId));
+        Item itemUpdated = itemService.update(itemId, item);
         return itemMapper.toItemDto(itemUpdated);
     }
 
     @GetMapping("/{id}")
     public ItemDto getById(@PathVariable int id) {
-        return itemMapper.toItemDto(itemServiceImpl.getById(id));
+        return itemMapper.toItemDto(itemService.getById(id));
     }
 
     @GetMapping
     public List<ItemDto> getAllByUser(@RequestHeader(USER_ID_HEADER) int userId) {
-        return itemServiceImpl.getAllByUser(userId).stream()
+        return itemService.getAllByUser(userId).stream()
                 .map(itemMapper::toItemDto)
                 .collect(Collectors.toList());
     }
 
     @GetMapping("/search")
     public List<ItemDto> searchByText(@RequestParam String text) {
-        return itemServiceImpl.searchByText(text).stream()
+        return itemService.searchByText(text).stream()
                 .map(itemMapper::toItemDto)
                 .collect(Collectors.toList());
     }
