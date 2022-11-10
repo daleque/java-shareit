@@ -21,7 +21,7 @@ public class User {
 
     @NotNull
     @Email
-    @Column(nullable = false, unique=true)
+    @Column(nullable = false, unique = true)
     private String email;
 
 }
