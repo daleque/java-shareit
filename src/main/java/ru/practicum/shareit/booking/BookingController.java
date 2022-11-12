@@ -58,12 +58,8 @@ public class BookingController {
             @RequestParam(defaultValue = "ALL", required = false) String state
 
     ) {
-        BookingState stater;
-        try {
-            stater = BookingState.valueOf(state);
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Unknown state:" + state);
-        }
+        BookingState stater = BookingState.fromStringToState(state).orElseThrow(
+                () -> new IllegalArgumentException("Unknown state:" + state));
 
         User owner = userService.getById(userId);
         return bookingService.findAllByUserId(userId, stater).stream()
