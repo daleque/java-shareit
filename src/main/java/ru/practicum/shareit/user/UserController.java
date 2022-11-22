@@ -2,7 +2,9 @@ package ru.practicum.shareit.user;
 
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.user.dto.UserDto;
+import ru.practicum.shareit.user.dto.UserMapper;
 import ru.practicum.shareit.user.model.User;
+import ru.practicum.shareit.user.service.UserService;
 
 import javax.validation.Valid;
 import java.util.Collection;
@@ -14,8 +16,8 @@ public class UserController {
 
     private UserService userService;
 
-    public UserController(UserServiceImpl userServiceImpl) {
-        this.userService = userServiceImpl;
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
     @GetMapping
@@ -26,7 +28,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public UserDto getById(@PathVariable int id) {
+    public UserDto getById(@PathVariable long id) {
         return UserMapper.toUserDto(userService.getById(id));
     }
 
@@ -39,12 +41,12 @@ public class UserController {
     }
 
     @PatchMapping("/{id}")
-    public UserDto update(@PathVariable int id, @RequestBody User user) {
+    public UserDto update(@PathVariable long id, @RequestBody User user) {
         return UserMapper.toUserDto(userService.update(id, user));
     }
 
     @DeleteMapping("/{id}")
-    public void remove(@PathVariable int id) {
+    public void remove(@PathVariable long id) {
         userService.remove(id);
     }
 }
