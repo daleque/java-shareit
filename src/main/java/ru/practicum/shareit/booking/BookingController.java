@@ -7,8 +7,6 @@ import ru.practicum.shareit.booking.dto.BookingMapper;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.BookingState;
 import ru.practicum.shareit.booking.service.BookingService;
-import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.item.service.ItemService;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.service.UserService;
 
@@ -26,7 +24,6 @@ import static ru.practicum.shareit.Constant.USER_ID_HEADER;
 public class BookingController {
     private final BookingService bookingService;
     private final UserService userService;
-    private final ItemService itemService;
 
     @PostMapping
     public BookingDto create(
