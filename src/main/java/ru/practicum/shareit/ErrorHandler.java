@@ -15,7 +15,7 @@ import java.util.Map;
 @Slf4j
 public class ErrorHandler {
     @ExceptionHandler
-    public ResponseEntity<String> handleValidationException(ObjectNotFoundException e) {
+    public ResponseEntity<String> handleObjectNotFoundException(ObjectNotFoundException e) {
         log.error(e.getMessage());
         return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
     }
@@ -27,7 +27,7 @@ public class ErrorHandler {
     }
 
     @ExceptionHandler
-    public ResponseEntity<String> handleValidateException(ValidationException e) {
+    public ResponseEntity<String> handleValidationException(ValidationException e) {
         log.error(e.getMessage());
         return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }

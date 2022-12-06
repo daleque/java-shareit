@@ -1,13 +1,15 @@
 package ru.practicum.shareit.booking.dto;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 import ru.practicum.shareit.booking.model.BookingStatus;
 
 import java.time.LocalDateTime;
 
-@Data
+@Setter
+@Getter
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class BookingDto {
     private long id;
     private LocalDateTime start;
@@ -17,13 +19,19 @@ public class BookingDto {
     private User booker;
     private BookingStatus status;
 
-    @Data
+    @Setter
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class Item {
         private Long id;
         private String name;
     }
 
-    @Data
+    @Setter
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class User {
         private Long id;
     }

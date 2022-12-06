@@ -65,8 +65,10 @@ public class ItemController {
     }
 
     @GetMapping
-    public List<ItemDtoWithBooking> getAllByUser(@RequestHeader(USER_ID_HEADER) long userId) {
-        return itemService.getAllByUser(userId).stream()
+    public List<ItemDtoWithBooking> getAllByUser(@RequestHeader(USER_ID_HEADER) long userId,
+                                                 @RequestParam(defaultValue = "0", required = false) int from,
+                                                 @RequestParam(defaultValue = "10", required = false) int size) {
+        return itemService.getAllByUser(userId, from, size).stream()
                 .map(item -> {
                     List<Comment> commentList = itemService.findCommentsByItemId(item.getId());
                     Booking lastBooking = bookingService.findLastBookingByItemId(item.getId());
@@ -77,8 +79,10 @@ public class ItemController {
     }
 
     @GetMapping("/search")
-    public List<ItemDto> searchByText(@RequestParam String text) {
-        return itemService.searchByText(text).stream()
+    public List<ItemDto> searchByText(@RequestParam String text,
+                                      @RequestParam(defaultValue = "0", required = false) int from,
+                                      @RequestParam(defaultValue = "10", required = false) int size) {
+        return itemService.searchByText(text, from, size).stream()
                 .map(ItemMapper::toItemDto)
                 .collect(Collectors.toList());
     }

@@ -5,13 +5,12 @@ import ru.practicum.shareit.user.model.User;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
-/**
- * TODO Sprint add-item-requests.
- */
 @Entity
 @Table(name = "item_requests")
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 @ToString
@@ -22,8 +21,8 @@ public class ItemRequest {
     @NotNull
     @Column(nullable = false)
     private String description;
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH}, fetch = FetchType.EAGER)
     @JoinColumn(name = "requester_id")
     private User requester;
-    private LocalDate created;
+    private LocalDateTime created;
 }
