@@ -8,6 +8,8 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "users")
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 @ToString

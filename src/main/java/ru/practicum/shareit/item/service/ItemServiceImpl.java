@@ -2,6 +2,8 @@ package ru.practicum.shareit.item.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.storage.BookingRepository;
@@ -49,16 +51,16 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<Item> searchByText(String text) {
+    public List<Item> searchByText(String text, int from, int size) {
         if (text != null && !text.isBlank())
             return itemRepository.findByNameContainsIgnoreCaseOrDescriptionContainsIgnoreCaseAndAvailableTrue(text,
-                    text);
+                    text, PageRequest.of(from, size));
         return new ArrayList<>();
     }
 
     @Override
-    public List<Item> getAllByUser(long userId) {
-        return itemRepository.findByOwner_Id(userId);
+    public List<Item> getAllByUser(long userId, int from, int size) {
+        return itemRepository.findByOwner_Id(userId, PageRequest.of(from, size, Sort.by("id")));
     }
 
     @Override
@@ -68,7 +70,7 @@ public class ItemServiceImpl implements ItemService {
             throw new ValidationException("Текст пустой");
 
         List<Booking> bookingList = bookingRepository.findByBooker_IdAndEndBefore(comment.getAuthor().getId(),
-                LocalDateTime.now());
+                LocalDateTime.now(), PageRequest.of(0, 10));
         if (bookingList.isEmpty())
             throw new ValidationException("Пользователь не бронирует свой товар");
         comment.setCreated(LocalDateTime.now());
@@ -101,6 +103,11 @@ public class ItemServiceImpl implements ItemService {
             updatedItem.setAvailable(item.getAvailable());
         }
         return updatedItem;
+    }
+
+    @Override
+    public List<Item> findByRequestId(long requestId) {
+        return itemRepository.findByRequest_Id(requestId, Sort.by("id").descending());
     }
 
 }

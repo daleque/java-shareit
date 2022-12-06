@@ -13,6 +13,7 @@ import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.service.UserService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,11 +32,10 @@ public class BookingController {
     public BookingDto create(
             @Valid @RequestBody BookingDto bookingDto,
             @RequestHeader(USER_ID_HEADER) long bookerId
+
     ) {
-        User booker = userService.getById(bookerId);
-        Item item = itemService.getById(bookingDto.getItemId());
-        Booking booking = BookingMapper.toBooking(booker, item, bookingDto);
-        return BookingMapper.toBookingDto(bookingService.create(booking));
+        Booking booking = BookingMapper.toBooking(bookingDto);
+        return BookingMapper.toBookingDto(bookingService.create(bookerId, booking));
     }
 
     @PatchMapping("/{bookingId}")
@@ -55,14 +55,16 @@ public class BookingController {
     @GetMapping
     public List<BookingDto> findAllByUserId(
             @RequestHeader(USER_ID_HEADER) long userId,
-            @RequestParam(defaultValue = "ALL", required = false) String state
+            @RequestParam(defaultValue = "ALL", required = false) String state,
+            @RequestParam(defaultValue = "0", required = false) int from,
+            @RequestParam(defaultValue = "10", required = false) int size
 
     ) {
         BookingState stater = BookingState.fromStringToState(state).orElseThrow(
                 () -> new IllegalArgumentException("Unknown state:" + state));
 
         User owner = userService.getById(userId);
-        return bookingService.findAllByUserId(userId, stater).stream()
+        return bookingService.findAllByUserId(userId, stater, from, size).stream()
                 .map(BookingMapper::toBookingDto)
                 .collect(Collectors.toList());
     }
@@ -70,13 +72,15 @@ public class BookingController {
     @GetMapping("/owner")
     public List<BookingDto> findAllByOwnerId(
             @RequestHeader(USER_ID_HEADER) long ownerId,
-            @RequestParam(defaultValue = "ALL", required = false) String state
+            @RequestParam(defaultValue = "ALL", required = false) String state,
+            @RequestParam(defaultValue = "0", required = false) @PositiveOrZero int from,
+            @RequestParam(defaultValue = "10", required = false) int size
 
     ) {
         BookingState stater = BookingState.fromStringToState(state).orElseThrow(
                 () -> new IllegalArgumentException("Unknown state:" + state));
         User owner = userService.getById(ownerId);
-        return bookingService.findAllByOwnerId(ownerId, stater).stream()
+        return bookingService.findAllByOwnerId(ownerId, stater, from, size).stream()
                 .map(BookingMapper::toBookingDto)
                 .collect(Collectors.toList());
     }

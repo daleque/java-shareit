@@ -13,11 +13,13 @@ public interface ItemService {
 
     Item update(long userId, long itemId, Item item);
 
-    List<Item> searchByText(String text);
+    List<Item> searchByText(String text, int from, int size);
 
-    List<Item> getAllByUser(long userId);
+    List<Item> getAllByUser(long userId, int from, int size);
 
     Comment addCommentToItem(Comment comment);
 
     List<Comment> findCommentsByItemId(long itemId);
+
+    List<Item> findByRequestId(long requestId);
 }
